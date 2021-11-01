@@ -1,0 +1,112 @@
+<div class="body">
+    <div class="row">
+        <div class="align-items-center col-lg-12  list-title">
+          Inventory Item List
+       </div><br><br>
+    </div>
+    <form #testForm="ngForm" (ngSubmit)="testForm.form.valid" novalidate>
+      <div class="col-lg-12">
+        <button (click)="addRow(selectedRow)"
+                class="btn btn-lerger  btn-primary top-margin add-row">
+           Add
+        </button>
+    </div><br><br>
+        <div class="row">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10 center">
+                <div class="card">
+                    <mat-table class="mat-elevation-z8"  
+                               [dataSource]="userListMatTabDataSource"
+                               matSort matSortActive="userName"
+                               matSortDirection="asc" matSortDisableClear>
+                        <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef>Action
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let user; let i = index;">
+                          <i class="fa fa-pencil color-blue mr-l20" id="{{i}}"  
+                            (click)="edited(user)" *ngIf="!user.edited"></i>
+                            <i class="fa fa-remove color-red mr-l20" id="{{i}}"  
+                            (click)="deleteUser(user)"></i>
+                            <i class="fa fa-check color-green mr-l20" id="{{i}}"  
+                            (click)="save(i)" *ngIf="user.edited"></i>
+                            </mat-cell>
+                        </ng-container>
+                       
+                  <ng-container matColumnDef="name">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+                              Name
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let user; let i = index;">
+                           <div class="form-group"
+                                [class.text-danger]="name.invalid">
+                           <input required type="text" #name="ngModel"   
+                                  class="form-control"
+                                  name="name-{{i}}"  
+                                  [(ngModel)]="user.name"
+                                  [disabled]="!(user.edited || user.id ==  
+  undefined)">
+                                    <div *ngIf="name.errors?.required">
+                                      Name is  required
+                                      </div>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="description">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                              Description
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let user; let i = index;">
+                                <div class="form-group"
+                                     [class.text-danger]="description.invalid">
+                                     <input type="text"  #description="ngModel"  
+                                            class="form-control"
+                                            name="description-{{i}}"   
+                                        [(ngModel)]="user.description" description required
+                             [disabled]="!(user.edited || user.id == undefined)">
+                                      <div *ngIf="description.invalid"
+                                     class="has-error control-label help-block">
+                                  
+                        <div *ngIf="description.errors?.required">
+                          description is  required
+                          </div>
+                    </div>
+                </div>
+             </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="price">
+               <mat-header-cell *matHeaderCellDef mat-sort-header>
+                Price
+               </mat-header-cell>
+               <mat-cell *matCellDef="let user; let i = index;">
+                   <div class="form-group"
+                        [class.text-danger]="price.invalid">
+                       <input type="number" class="form-control"  
+                              #price="ngModel"
+                              name="price{{i}}"
+                              [(ngModel)]="user.price"
+                              [disabled]="!(user.edited || user.id == undefined)"
+                              number required >
+                           <div *ngIf="price.invalid"
+                                 class="has-error control-label help-block">
+                            <div *ngIf="price.errors?.number">
+                              price is not valid
+                            </div>
+                            <div *ngIf="price.errors?.required">
+                              price is required
+                            </div>
+                        </div>
+                      </div>
+                 </mat-cell>
+              </ng-container>
+           
+                        <mat-header-row *matHeaderRowDef="columnList"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: columnList; let i = index;" [class.selected]="selectedRow == row.id"
+                            [class.edited]="row.edited || row.id == undefined" (click)="rowClick(row.id)">
+                        </mat-row>
+                    </mat-table>
+                   </div>
+            </div>
+        </div>
+      
+    </form>
+  </div>
